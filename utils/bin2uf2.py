@@ -21,7 +21,7 @@ def word(x):
     return bytearray(x.to_bytes(4, 'little'))
 
 def uf2block(blocknumber, nblocks, block):
-     return word(first_magic_number) + word(second_magic_number) + word(flags) + word(load_address + n*0x100) + \
+     return word(first_magic_number) + word(second_magic_number) + word(flags) + word(load_address + blocknumber*0x100) + \
             word(block_size) + word(blocknumber) + word(nblocks) + word(family_id) + block + padding + word(final_magic_number)
 
 f = open(argv[1], "rb")
