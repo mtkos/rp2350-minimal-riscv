@@ -1,4 +1,5 @@
 #define PLL_SYS_BASE 0x40050000
+#define PLL_USB_BASE 0x40058000
 #define   PLL_CS_OFFSET 0x0
 #define     PLL_CS_LOCK_BITS 1<<31
 #define   PLL_PWR_OFFSET 0x4
