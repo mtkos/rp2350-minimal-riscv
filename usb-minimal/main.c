@@ -90,6 +90,7 @@ void buffer_to_dpram(uint8_t * dpram_buf, uint8_t* buf, uint8_t len){
         dpram_buf[i] = buf[i];
     REG(USBCTRL_DPRAM_BASE + USB_DEVICE_DPRAM_EP0_IN_BUFFER_CONTROL_OFFSET) = USB_DEVICE_DPRAM_EP0_IN_BUFFER_CONTROL_FULL_0_BITS |
                                                                               USB_DEVICE_DPRAM_EP0_IN_BUFFER_CONTROL_PID_0_BITS  |
+                                                                              USB_DEVICE_DPRAM_EP0_IN_BUFFER_CONTROL_AVAILABLE_0_BITS |
                                                                               len;
 }
 
@@ -120,10 +121,7 @@ void handle_ep0_setup(){
         handle_get_request();
     }
 
-    REG(USBCTRL_DPRAM_BASE + USB_DEVICE_DPRAM_EP0_IN_BUFFER_CONTROL_OFFSET) |= USB_DEVICE_DPRAM_EP0_IN_BUFFER_CONTROL_AVAILABLE_0_BITS;
     REG(USBCTRL_REGS_BASE + USB_SIE_STATUS_OFFSET) = USB_SIE_STATUS_SETUP_REC_BITS;
-
-    REG(USBCTRL_REGS_BASE + USB_BUFF_STATUS_OFFSET) = USB_BUFF_STATUS_EP0_IN_BITS;
 }
 
 void handle_ep0_in(){
@@ -131,13 +129,11 @@ void handle_ep0_in(){
     if(ctrl_request.bRequest == 5)
         REG(USBCTRL_REGS_BASE + USB_ADDR_ENDP_OFFSET) = ctrl_request.wValue_low;
 
-    REG(USBCTRL_DPRAM_BASE + USB_DEVICE_DPRAM_EP0_IN_BUFFER_CONTROL_OFFSET) |= USB_DEVICE_DPRAM_EP0_IN_BUFFER_CONTROL_AVAILABLE_0_BITS;
     REG(USBCTRL_REGS_BASE + USB_BUFF_STATUS_OFFSET) = USB_BUFF_STATUS_EP0_IN_BITS;
 }
 
 void handle_ep0_out(){
 
-    REG(USBCTRL_DPRAM_BASE + USB_DEVICE_DPRAM_EP0_OUT_BUFFER_CONTROL_OFFSET) = USB_DEVICE_DPRAM_EP0_OUT_BUFFER_CONTROL_AVAILABLE_0_BITS;
     REG(USBCTRL_REGS_BASE + USB_BUFF_STATUS_OFFSET) = USB_BUFF_STATUS_EP0_OUT_BITS;
 }
 
